@@ -2,7 +2,7 @@
 """unittest test script of utils.py"""
 import unittest
 from parameterized import parameterized
-from utils import get_json, access_nested_map
+from utils import memoize, get_json, access_nested_map
 from unittest.mock import patch
 
 
@@ -40,3 +40,26 @@ class TestGetJson(unittest.TestCase):
             result = get_json(test_url)
             mock_get.assert_called_once_with(test_url)
             self.assertEqual(test_payload, result)
+
+class TestMemoize(unittest.TestCase):
+    """Test class for memoize decorator"""
+    def test_memoize(self):
+        class TestClass:
+            """a Test class created for test only"""
+            def a_method(self):
+                """a_method is to be called to test memoize"""
+                return 42
+
+            @memoize
+            def a_property(self):
+                """calls the a_method for a test"""
+                return self.a_method()
+
+        with patch.object(TestClass, 'a_method', return_value=42) as mock_a_method:
+            inst_test = TestClass()
+            result1 = inst_test.a_property
+            result2 = inst_test.a_property
+
+            mock_a_method.assert_called_once()
+            self.assertEqual(result1, 42)
+            self.assertEqual(result1, result2) 
