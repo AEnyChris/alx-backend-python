@@ -14,12 +14,12 @@ class TestGithubOrgClient(unittest.TestCase):
         ('abc')
         ])
     @patch('client.get_json')
-    def test_org(self, org_name, mock_org):
+    def test_org(self, org, mock_org):
         """test method for .org method"""
-        inst = GithubOrgClient(org_name)
+        inst = GithubOrgClient(org)
         result = inst.org
 
-        mock_org.assert_called_once_with(inst.ORG_URL.format(org=org_name))
+        mock_org.assert_called_once_with(inst.ORG_URL.format(org=org))
 
     def test_public_repos_url(self):
         """method to test _public_repos_url method"""
