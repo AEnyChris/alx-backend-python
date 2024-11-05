@@ -3,6 +3,7 @@
 import unittest
 from unittest.mock import patch
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
 from parameterized import parameterized
 
 
@@ -19,3 +20,11 @@ class TestGithubOrgClient(unittest.TestCase):
         result = inst.org
 
         mock_org.assert_called_once_with(inst.ORG_URL.format(org=org_name))
+
+    def test_public_repos_url(self):
+        """method to test _public_repos_url method"""
+        with patch.object(GithubOrgClient, 'org', new=TEST_PAYLOAD[0][0]):
+            test_inst = GithubOrgClient('google')
+            result = test_inst._public_repos_url
+
+            self.assertEqual(result, TEST_PAYLOAD[0][0]['repos_url'])
